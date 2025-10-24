@@ -16,7 +16,11 @@ def limpiar_nombres_columnas(df):
     df_renombrado  = df.rename(
         columns={
             'tpep_pickup_datetime':'pickup_datetime',
-            'tpep_dropoff_datetime':'dropoff_datetime'
+            'tpep_dropoff_datetime':'dropoff_datetime',
+            'passenger_count': 'passengers',
+            'trip_distance': 'distance'
         }
     )
+    df_renombrado.columns = df_renombrado.columns.str.strip().str.lower();
+    
     return df_renombrado
