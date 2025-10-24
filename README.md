@@ -6,9 +6,9 @@ Análisis Geoespacial de la Movilidad Urbana en Nueva York.**
 
 **Integrantes**
 
-Leonardo Mafla
-Vanessa Nasimba
-Edwin Tapia
+- Leonardo Mafla
+- LVanessa Nasimba
+- Edwin Tapia
 
 **Tema**
 Análisis de datos geoespaciales de viajes en taxi en Nueva York para identificar patrones de movilidad urbana y optimizar rutas y servicios.
