@@ -7,7 +7,7 @@ Análisis Geoespacial de la Movilidad Urbana en Nueva York.**
 **Integrantes**
 
 - Leonardo Mafla
-- LVanessa Nasimba
+- Vanessa Nasimba
 - Edwin Tapia
 
 **Tema**
