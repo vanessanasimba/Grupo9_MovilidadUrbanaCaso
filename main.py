@@ -1,7 +1,7 @@
 import os
 # Importar las funciones desde los scripts
 from scripts.data_loader import cargar_datos
-from scripts.data_cleaning import limpiar_nombres_columnas
+from scripts.data_cleaning import (limpiar_nombres_columnas, convertir_tipos_fechas,eliminar_coordenadas_invalidas)
 from scripts.data_saving import guardar_datos_limpios
 
 #ruta absoluta de la carpeta donde esta el script (./)
@@ -19,20 +19,11 @@ if __name__ == "__main__":
     df_movilidad = cargar_datos(DATA_PATH)
     
     if df_movilidad is not None:
-        print("\n===Primeras 5 filas del DataFrame cargado ======")
-        print(df_movilidad.head())
-        
-        print(f"\n=======Información del DataFrame antes de limpiar columnas ======")
-        df_movilidad.info()
-        
-        # Limpiar los nombres de las columnas
-        df_movilidad_limpio = limpiar_nombres_columnas(df_movilidad)
-        
-        print("\n===Primeras 5 filas del DataFrame con columnas limpias ======")
-        print(df_movilidad_limpio.head())
-        
-        print(f"\n=======Información del DataFrame después de limpiar columnas ======")
-        df_movilidad_limpio.info()
+       print("Iniciando el proceso de limpieza de datos...")
+       # Limpiar los nombres de las columnas
+       df_limpio = limpiar_nombres_columnas(df_movilidad)
+       df_limpio = convertir_tipos_fechas(df_limpio)
+       df_limpio = eliminar_coordenadas_invalidas(df_limpio)
     else:
         print("No se pudieron cargar los datos. Terminando el script.")
 

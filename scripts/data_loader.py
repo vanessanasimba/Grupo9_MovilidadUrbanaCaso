@@ -37,18 +37,3 @@ def cargar_datos(path):
     except Exception as e:
         print(f"Ocurrió un error inesperado: {e}")
         return None
-
-# Este acrchivo se esta ejecuntando directamente por el uuario o esta siendo importada pr otro script 
-if __name__ == "__main__":
-    # indica en donde esta el archivo de datos
-    print(f"Ejecutando el script desde: {os.path.abspath(__file__)}")
-    
-    dataframe_movilidad = cargar_datos(DATA_PATH)
-    
-    # Mostrar las primeras filas del DataFrame cargado
-    if dataframe_movilidad is not None:
-        print("\n===Primeras 5 filas del DataFrame cargado ======")
-        print(dataframe_movilidad.head())
-        
-        print(f"\n=======Información del DataFrame ======")
-        dataframe_movilidad.info()
