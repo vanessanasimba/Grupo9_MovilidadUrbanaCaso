@@ -62,4 +62,22 @@ def eliminar_coordenadas_invalidas(df):
     ]
         
     return df
+def filtar_rango_geografico_valido(df):
+    """
+    Filtra las filas del DataFrame para mantener solo aquellas dentro de un rango geográfico válido.
+
+    Args:
+        df (pd.DataFrame): DataFrame a filtrar.
+        
+    """
+    print("Filtrando filas fuera del rango geográfico de NY válido...")
+    
+    df = df[
+        (df['pickup_latitude'].between(40.5, 41.0)) &
+        (df['pickup_longitude'].between(-74.3, -73.6)) &
+        (df['dropoff_latitude'].between(40.5, 41.0)) &
+        (df['dropoff_longitude'].between(-74.3, -73.6))
+    ]
+        
+    return df
 
