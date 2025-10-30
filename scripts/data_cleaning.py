@@ -81,3 +81,32 @@ def filtar_rango_geografico_valido(df):
         
     return df
 
+def eliminar_columnas_innecesarias(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Elimina columnas irrelevantes para el análisis geoespacial
+    del dataset de taxis de NYC.
+    """
+    columnas_eliminar = [
+        'vendorid',
+        'ratecodeid',
+        'store_and_fwd_flag',
+        'payment_type',
+        'extra',
+        'mta_tax',
+        'tip_amount',
+        'tolls_amount',
+        'improvement_surcharge',
+        'congestion_surcharge'
+    ]
+    
+    columnas_presentes = [col for col in columnas_eliminar if col in df.columns]
+    
+    if columnas_presentes:
+        df = df.drop(columns=columnas_presentes)
+        print(f"Se eliminaron {len(columnas_presentes)} columnas innecesarias: {columnas_presentes}")
+    else:
+        print("No hay columnas innecesarias que eliminar.")
+    
+    return df
+
+

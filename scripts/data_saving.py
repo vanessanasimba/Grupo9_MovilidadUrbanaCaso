@@ -11,7 +11,7 @@ def guardar_datos_limpios(df, path):
     """
     print(f"Guardando el DataFrame limpio en: {path}")
     try:
-        print("Se esa creasno el archivo limpio...  ")
+        print("Se esta creando el archivo limpio...  ")
         
         os.makedirs(os.path.dirname(path), exist_ok=True)
         
