@@ -92,37 +92,47 @@ if len(df_filtrado) > 0:
 else:
     st.warning("No hay datos para calcular KPIs en el rango seleccionado.")
     
+
+tab1, tab2, tab3 = st.tabs(["🔥 Mapa de Calor origen","🔥 Mapa de Calor destino", "🧭 Mapa de Flujos"])
+ 
+# --- TAB 1: Mapa de Calor ---
+with tab1:   
 # ------------------------------------------------------
 # VISUALIZACIÓN 1: MAPA DE CALOR (PICKUPS)
 # ------------------------------------------------------
-st.subheader("🔥 Mapa de Calor de Puntos de origen")
-# Validar columnas necesarias
-if 'pickup_latitude' in df_filtrado.columns and 'pickup_longitude' in df_filtrado.columns:
-    MAX_PUNTOS = 20000
-    if len(df_filtrado) > MAX_PUNTOS:
-        df_mapa = df_filtrado.sample(MAX_PUNTOS, random_state=42)
+    st.subheader("🔥 Mapa de Calor de Puntos de origen")
+    # Validar columnas necesarias
+    if 'pickup_latitude' in df_filtrado.columns and 'pickup_longitude' in df_filtrado.columns:
+        MAX_PUNTOS = 20000
+        if len(df_filtrado) > MAX_PUNTOS:
+            df_mapa = df_filtrado.sample(MAX_PUNTOS, random_state=42)
+        else:
+            df_mapa = df_filtrado.copy()
+
+        df_mapa = df_mapa.rename(columns={'pickup_latitude': 'lat', 'pickup_longitude': 'lon'})
+
+        view_state = pdk.ViewState(latitude=40.7128, longitude=-74.0060, zoom=11, pitch=40)
+
+        heatmap_layer = pdk.Layer(
+            "HeatmapLayer",
+            data=df_mapa,
+            get_position='[lon, lat]',
+            radius_pixels=40,
+            intensity=1,
+            opacity=0.9,
+        )
+
+        r = pdk.Deck(
+            layers=[heatmap_layer],
+            initial_view_state=view_state,
+            map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+        )
+
+        st.pydeck_chart(r)
     else:
-        df_mapa = df_filtrado.copy()
-
-    df_mapa = df_mapa.rename(columns={'pickup_latitude': 'lat', 'pickup_longitude': 'lon'})
-
-    view_state = pdk.ViewState(latitude=40.7128, longitude=-74.0060, zoom=11, pitch=40)
-
-    heatmap_layer = pdk.Layer(
-        "HeatmapLayer",
-        data=df_mapa,
-        get_position='[lon, lat]',
-        radius_pixels=40,
-        intensity=1,
-        opacity=0.9,
-    )
-
-    r = pdk.Deck(
-        layers=[heatmap_layer],
-        initial_view_state=view_state,
-        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-    )
-
-    st.pydeck_chart(r)
-else:
-    st.error("❌ No se encontraron columnas de coordenadas válidas.")
+        st.error("❌ No se encontraron columnas de coordenadas válidas.")
+with tab2:
+      st.subheader("🔥 Mapa de Calor de Puntos de destino")
+with tab3:
+      st.subheader("🧭 Mapa de Flujos")
+  
