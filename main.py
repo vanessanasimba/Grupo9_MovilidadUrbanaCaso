@@ -1,9 +1,9 @@
 import os
 # Importar las funciones desde los scripts
 from scripts.data_loader import cargar_datos
-from scripts.data_cleaning import (limpiar_nombres_columnas, convertir_tipos_fechas,eliminar_coordenadas_invalidas,filtar_rango_geografico_valido, eliminar_columnas_innecesarias,convertir_tipo_fecha)
+from scripts.data_cleaning import (limpiar_nombres_columnas, convertir_tipos_fechas,eliminar_coordenadas_invalidas,filtar_rango_geografico_valido, eliminar_columnas_innecesarias,convertir_tipo_fecha,redondear_coordenadas)
 from scripts.data_new_features import (crear_columna_dia_semana_pickup, crear_columna_hora_pickup, crear_columna_fecha_pickup, crear_columna_viaje_duracion, crear_columna_hora_pico)
-from scripts.data_imputation import rellenar_valores_pasajeros_en_cero
+from scripts.data_imputation import (rellenar_valores_pasajeros_en_cero,eliminar_coordenadas_null)
 from scripts.data_saving import guardar_datos_limpios
 
 #ruta absoluta de la carpeta donde esta el script (./)
@@ -28,12 +28,14 @@ if __name__ == "__main__":
         df_limpio = eliminar_coordenadas_invalidas(df_limpio)
         df_limpio = filtar_rango_geografico_valido(df_limpio)
         df_limpio = eliminar_columnas_innecesarias(df_limpio)
+        df_limpio = redondear_coordenadas(df_limpio)
         
         print("\n---LIMPIEZA DE DATOS TERMINADO---")
         
         # MÓDULO IMPUTACIÓN DE DATOS
         print("\n---INICIANDO IMPUTACIÓN DE DATOS---")
         df_procesado = rellenar_valores_pasajeros_en_cero(df_limpio)
+        df_procesado = eliminar_coordenadas_null(df_limpio)
         
         print("\n---IMPUTACIÓN DE DATOS TERMINADO---")
         

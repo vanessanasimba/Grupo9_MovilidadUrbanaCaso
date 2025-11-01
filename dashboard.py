@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import plotly.express as px
 import datetime
+import pydeck as pdk
 
 st.set_page_config(layout="wide")
 
@@ -90,3 +91,38 @@ if len(df_filtrado) > 0:
     kpi4.metric("Pasajeros Promedio", f"{pasajeros_promedio:.1f}")
 else:
     st.warning("No hay datos para calcular KPIs en el rango seleccionado.")
+    
+# ------------------------------------------------------
+# VISUALIZACIÓN 1: MAPA DE CALOR (PICKUPS)
+# ------------------------------------------------------
+st.subheader("🔥 Mapa de Calor de Puntos de origen")
+# Validar columnas necesarias
+if 'pickup_latitude' in df_filtrado.columns and 'pickup_longitude' in df_filtrado.columns:
+    MAX_PUNTOS = 20000
+    if len(df_filtrado) > MAX_PUNTOS:
+        df_mapa = df_filtrado.sample(MAX_PUNTOS, random_state=42)
+    else:
+        df_mapa = df_filtrado.copy()
+
+    df_mapa = df_mapa.rename(columns={'pickup_latitude': 'lat', 'pickup_longitude': 'lon'})
+
+    view_state = pdk.ViewState(latitude=40.7128, longitude=-74.0060, zoom=11, pitch=40)
+
+    heatmap_layer = pdk.Layer(
+        "HeatmapLayer",
+        data=df_mapa,
+        get_position='[lon, lat]',
+        radius_pixels=40,
+        intensity=1,
+        opacity=0.9,
+    )
+
+    r = pdk.Deck(
+        layers=[heatmap_layer],
+        initial_view_state=view_state,
+        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+    )
+
+    st.pydeck_chart(r)
+else:
+    st.error("❌ No se encontraron columnas de coordenadas válidas.")

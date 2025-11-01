@@ -117,4 +117,25 @@ def convertir_tipo_fecha(df):
     
     return df
 
+def redondear_coordenadas(df):
+    """
+    Redondea las columnas de coordenadas geográficas a 4 decimales
+    para reducir la carga en memoria y mejorar el rendimiento de visualización.
+
+    Args:
+        df (pd.DataFrame): DataFrame con coordenadas pickup/dropoff.
+    Returns:
+        pd.DataFrame: DataFrame con coordenadas redondeadas.
+    """
+    print("Redondear las coordnadas con 4 decimilaes")
+    
+    df = df.round({
+        'pickup_latitude': 4, 
+        'pickup_longitude': 4,
+        'dropoff_latitude': 4, 
+        'dropoff_longitude': 4
+    })
+    
+    return df
+
 
