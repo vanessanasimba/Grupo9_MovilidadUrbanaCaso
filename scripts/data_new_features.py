@@ -34,7 +34,18 @@ def crear_columna_fecha_pickup(df):
     """
     print("Creando la columna 'pickup_date'...")
     
-    df['pickup_date'] = df['pickup_datetime'].dt.date
+    if not pd.api.types.is_datetime64_any_dtype(df['pickup_datetime']):
+        df['pickup_datetime'] = pd.to_datetime(df['pickup_datetime'], errors='coerce')
+
+    # Crear la columna solo con la fecha (sin hora)
+    df['pickup_date'] = df['pickup_datetime'].dt.normalize()
+
+    # Asegurar tipo datetime64[ns]
+    df['pickup_date'] = pd.to_datetime(df['pickup_date'], errors='coerce')
+
+    print("Columna 'pickup_date' creada en formato datetime64[ns].")
+
+    return df
     
     return df
 def crear_columna_viaje_duracion(df):

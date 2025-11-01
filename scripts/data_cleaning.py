@@ -109,4 +109,12 @@ def eliminar_columnas_innecesarias(df: pd.DataFrame) -> pd.DataFrame:
     
     return df
 
+def convertir_tipo_fecha(df):
+   
+    print("Convirtiendo columnas de fechas a tipo datetime...")
+    
+    df['pickup_date'] = pd.to_datetime(df['pickup_date'], errors='coerce')
+    
+    return df
+
 
