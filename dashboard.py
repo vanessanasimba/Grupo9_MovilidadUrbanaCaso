@@ -7,7 +7,7 @@ import pydeck as pdk
 
 st.set_page_config(layout="wide")
 
-DATA_PATH = r"C:\Users\nmvan\Documents\Complexivo\Grupo9_MovilidadUrbanaCaso\data\processed\tripdata_cleaned.csv"
+DATA_PATH = r"C:\git\Grupo9_MovilidadUrbanaCaso\data\processed\tripdata_cleaned.csv"
 @st.cache_data
 def load_data(path):
     data = pd.read_csv(path)
@@ -135,4 +135,38 @@ with tab2:
       st.subheader("🔥 Mapa de Calor de Puntos de destino")
 with tab3:
       st.subheader("🧭 Mapa de Flujos")
+      
+with tab2:
+    st.subheader("🔥 Mapa de Calor de Puntos de Destino")
+    
+    # Validar columnas necesarias
+    if 'dropoff_latitude' in df_filtrado.columns and 'dropoff_longitude' in df_filtrado.columns:
+        MAX_PUNTOS = 20000
+        if len(df_filtrado) > MAX_PUNTOS:
+            df_mapa_destino = df_filtrado.sample(MAX_PUNTOS, random_state=42)
+        else:
+            df_mapa_destino = df_filtrado.copy()
+
+        df_mapa_destino = df_mapa_destino.rename(columns={'dropoff_latitude': 'lat', 'dropoff_longitude': 'lon'})
+
+        view_state = pdk.ViewState(latitude=40.7128, longitude=-74.0060, zoom=11, pitch=40)
+
+        heatmap_layer = pdk.Layer(
+            "HeatmapLayer",
+            data=df_mapa_destino,
+            get_position='[lon, lat]',
+            radius_pixels=40,
+            intensity=1,
+            opacity=0.9,
+        )
+
+        r = pdk.Deck(
+            layers=[heatmap_layer],
+            initial_view_state=view_state,
+            map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+        )
+
+        st.pydeck_chart(r)
+    else:
+        st.error("❌ No se encontraron columnas de coordenadas válidas para destinos.")
   
