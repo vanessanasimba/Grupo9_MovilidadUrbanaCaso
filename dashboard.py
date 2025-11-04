@@ -7,7 +7,7 @@ import pydeck as pdk
 
 st.set_page_config(layout="wide")
 
-DATA_PATH = r"C:\git\Grupo9_MovilidadUrbanaCaso\data\processed\tripdata_cleaned.csv"
+DATA_PATH = r"C:\Users\nmvan\Documents\Complexivo\Grupo9_MovilidadUrbanaCaso\data\processed\tripdata_cleaned.csv"
 @st.cache_data
 def load_data(path):
     data = pd.read_csv(path)
@@ -130,12 +130,7 @@ with tab1:
 
         st.pydeck_chart(r)
     else:
-        st.error("❌ No se encontraron columnas de coordenadas válidas.")
-with tab2:
-      st.subheader("🔥 Mapa de Calor de Puntos de destino")
-with tab3:
-      st.subheader("🧭 Mapa de Flujos")
-      
+        st.error("❌ No se encontraron columnas de coordenadas válidas.")    
 with tab2:
     st.subheader("🔥 Mapa de Calor de Puntos de Destino")
     
@@ -169,4 +164,6 @@ with tab2:
         st.pydeck_chart(r)
     else:
         st.error("❌ No se encontraron columnas de coordenadas válidas para destinos.")
+with tab3:
+      st.subheader("🧭 Mapa de Flujos")
   
