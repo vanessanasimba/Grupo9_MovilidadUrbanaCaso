@@ -4,10 +4,14 @@ import pandas as pd
 import plotly.express as px
 import datetime
 import pydeck as pdk
+import os
 
 st.set_page_config(layout="wide")
 
-DATA_PATH = r"C:\Users\nmvan\Documents\Complexivo\Grupo9_MovilidadUrbanaCaso\data\processed\tripdata_cleaned.csv"
+#DATA_PATH = r"C:\Users\Usuario\Desktop\UNIANDES\8VO\seminario-proyecto\Grupo9_CasoEstudioMovilidadUrbana\Grupo9_MovilidadUrbanaCaso\data\yellow_tripdata_2015-01.csv"
+
+BASE_DIR = os.getcwd() 
+DATA_PATH = os.path.join(BASE_DIR, 'data', 'processed', 'tripdata_cleaned.csv')
 @st.cache_data
 def load_data(path):
     data = pd.read_csv(path)
@@ -165,5 +169,49 @@ with tab2:
     else:
         st.error("❌ No se encontraron columnas de coordenadas válidas para destinos.")
 with tab3:
-      st.subheader("🧭 Mapa de Flujos")
+    st.subheader("🚕 Mapa de Flujos Origen–Destino")
+
+    # Verificar columnas necesarias
+    if all(col in df_filtrado.columns for col in ['pickup_latitude', 'pickup_longitude', 'dropoff_latitude', 'dropoff_longitude']):
+        MAX_PUNTOS = 1000
+        if len(df_filtrado) > MAX_PUNTOS:
+            df_mapa_flujo = df_filtrado.sample(MAX_PUNTOS, random_state=42)
+        else:
+            df_mapa_flujo = df_filtrado.copy()
+
+        # Capa de arcos para mostrar los flujos entre origen y destino
+        flow_layer = pdk.Layer(
+            "ArcLayer",
+            data=df_mapa_flujo,
+            get_source_position=["pickup_longitude", "pickup_latitude"],
+            get_target_position=["dropoff_longitude", "dropoff_latitude"],
+            get_source_color=[0, 128, 255, 150],
+            get_target_color=[255, 0, 128, 150],
+            auto_highlight=True,
+            width_scale=0.0005,
+            width_min_pixels=1,
+            get_width=1,
+            pickable=True,
+        )
+
+        view_state = pdk.ViewState(
+            latitude=df_mapa_flujo["pickup_latitude"].mean(),
+            longitude=df_mapa_flujo["pickup_longitude"].mean(),
+            zoom=11,
+            pitch=45,
+        )
+
+        r = pdk.Deck(
+            layers=[flow_layer],
+            initial_view_state=view_state,
+            map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
+        )
+
+        st.pydeck_chart(r)
+    else:
+        st.error("❌ No se encontraron columnas de coordenadas válidas para origen y destino.")
+
+
+
+
   
