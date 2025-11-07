@@ -64,17 +64,17 @@ rango_fechas = st.sidebar.date_input(
     max_value=fecha_max
 )
 
-st.sidebar.markdown("### 📅 Fecha y Hora")
-
-hora_min, hora_max = st.sidebar.slider("Rango de horas:", 0, 23, (6, 20))
+hora_sel = st.sidebar.slider("🕒 Selecciona la hora del día:", 0, 23, 8)
 
 st.sidebar.markdown("### 👥 Pasajeros")
 p_min, p_max = st.sidebar.slider("Número de pasajeros:", 1, int(df_clean['passengers'].max()), (1, 4))
 
+zonas_disponibles = sorted(df_clean["pickup_zone"].dropna().unique().tolist())
+zona_sel = st.sidebar.selectbox("📍 Zona de Origen (para mapa de flujos):", zonas_disponibles, index=0)
 inicio, fin = rango_fechas
 df_filtrado = df_clean[
     (df_clean['pickup_date'].between(pd.to_datetime(inicio), pd.to_datetime(fin))) &
-    (df_clean['pickup_hour'].between(hora_min, hora_max)) &
+    (df_clean['pickup_hour']== hora_sel) &
     (df_clean['passengers'].between(p_min, p_max))
 ]
 
@@ -93,19 +93,19 @@ else:
     st.warning("No hay datos para calcular KPIs en el rango seleccionado.")
     
 
-tab1, tab2, tab3 = st.tabs(["🔥 Mapa de Calor origen","🔥 Mapa de Calor destino", "🧭 Mapa de Flujos"])
+tab1, tab2, tab3 = st.tabs(["🔥 Mapa de Calor origen hora seleccionada","🔥 Mapa de Calor destino hora seleccionada", "🧭 Mapa de Flujos"])
  
 # --- TAB 1: Mapa de Calor ---
 with tab1:   
 # ------------------------------------------------------
 # VISUALIZACIÓN 1: MAPA DE CALOR (PICKUPS)
 # ------------------------------------------------------
-    st.subheader("🔥 Mapa de Calor de Puntos de origen")
+    st.subheader(f"🔥 Puntos de origen - Hora: {hora_sel}:00")
     # Validar columnas necesarias
     if 'pickup_latitude' in df_filtrado.columns and 'pickup_longitude' in df_filtrado.columns:
         MAX_PUNTOS = 20000
         if len(df_filtrado) > MAX_PUNTOS:
-            df_mapa = df_filtrado.sample(MAX_PUNTOS, random_state=42)
+            df_mapa = df_filtrado.sample(min(len(df_filtrado), MAX_PUNTOS), random_state=42)
         else:
             df_mapa = df_filtrado.copy()
 
@@ -132,7 +132,7 @@ with tab1:
     else:
         st.error("❌ No se encontraron columnas de coordenadas válidas.")    
 with tab2:
-    st.subheader("🔥 Mapa de Calor de Puntos de Destino")
+    st.subheader(f"🔥 Puntos de destino - Hora: {hora_sel}:00")
     
     # Validar columnas necesarias
     if 'dropoff_latitude' in df_filtrado.columns and 'dropoff_longitude' in df_filtrado.columns:
@@ -165,5 +165,23 @@ with tab2:
     else:
         st.error("❌ No se encontraron columnas de coordenadas válidas para destinos.")
 with tab3:
-      st.subheader("🧭 Mapa de Flujos")
-  
+        st.subheader(f"🧭 Flujos desde la zona seleccionada: {zona_sel}")
+        df_zona = df_clean[df_clean["pickup_zone"] == zona_sel]
+        df_zona = df_zona.sample(min(len(df_zona), 1000), random_state=42)
+
+        arc_layer = pdk.Layer(
+            "ArcLayer",
+            data=df_zona,
+            get_source_position=["pickup_longitude", "pickup_latitude"],
+            get_target_position=["dropoff_longitude", "dropoff_latitude"],
+            get_source_color=[0, 128, 255, 100],
+            get_target_color=[255, 0, 128, 100],
+            auto_highlight=True,
+            width_scale=0.0005,
+            width_min_pixels=1,
+        )
+
+        view_state = pdk.ViewState(latitude=40.7128, longitude=-74.0060, zoom=11, pitch=45)
+        r2 = pdk.Deck(layers=[arc_layer], initial_view_state=view_state,
+                      map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json")
+        st.pydeck_chart(r2)
