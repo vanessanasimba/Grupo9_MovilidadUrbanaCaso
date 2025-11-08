@@ -160,6 +160,11 @@ params = {
         "pass_max": p_max
 }
 
+params1 = {
+        "zona": zona_sel,
+        "limite": 1000
+}
+
 try:
     response_datos = requests.get(API_URL_KPI, params=params)
     response_datos.raise_for_status()
@@ -254,7 +259,7 @@ with tab2:
 with tab3:
     st.subheader(f"🧭 Flujos desde la zona seleccionada: {zona_sel}")
     try:
-        response_datos_flow = requests.get(API_URL_MAPA_FLOW, params=params)
+        response_datos_flow = requests.get(API_URL_MAPA_FLOW, params=params1)
         if response_datos_flow.status_code == 200:
             data = response_datos_flow.json()
             df_flow =  pd.DataFrame(data["data"])
@@ -262,26 +267,23 @@ with tab3:
             st.error(f"❌ Error {response_datos_flow.status_code}: {response_datos_flow.text}")
             df_flow = pd.DataFrame()
         
-        if not df_calor_destino.empty:
-            view_state = pdk.ViewState(latitude=40.7128, longitude=-74.0060, zoom=11, pitch=40)
-
-            heatmap_layer = pdk.Layer(
-                "HeatmapLayer",
+        if not df_flow.empty:
+            arc_layer = pdk.Layer(
+                "ArcLayer",
                 data=df_flow,
-                get_position='[lon, lat]',
-                radius_pixels=40,
-                intensity=1,
-                opacity=0.9,
+                get_source_position=["lon_origen", "lat_origen"],
+                get_target_position=["lon_destino", "lat_destino"],
+                get_source_color=[0, 128, 255, 100],
+                get_target_color=[255, 0, 128, 100],
+                auto_highlight=True,
+                width_scale=0.0005,
+                width_min_pixels=1,
             )
-
-            r = pdk.Deck(
-                layers=[heatmap_layer],
-                initial_view_state=view_state,
-                map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-            )
-
-            st.pydeck_chart(r)
-
+            
+            view_state = pdk.ViewState(latitude=40.7128, longitude=-74.0060, zoom=11, pitch=45)
+            r2 = pdk.Deck(layers=[arc_layer], initial_view_state=view_state,
+                        map_style="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json")
+            st.pydeck_chart(r2)
 
     except requests.exceptions.RequestException as e:
         st.error(f"Error al cargar datos del EDA desde la API: {e}") 

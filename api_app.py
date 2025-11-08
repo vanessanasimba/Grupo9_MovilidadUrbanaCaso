@@ -267,7 +267,12 @@ def obtener_flujos_por_zona(
             raise HTTPException(status_code=500, detail="El dataset no está disponible o no fue cargado correctamente.")
 
         # --- Filtrar por zona seleccionada ---
-        df_zona = df[df["pickup_zone"] == zona]
+        if zona.lower() != "todas":
+            df_zona = df[df["pickup_zone"] == zona]
+            if df_zona.empty:
+                raise HTTPException(status_code=404, detail=f"No se encontraron viajes desde la zona '{zona}'.")
+        else:
+            df_zona = df.copy()  # Todas las zonas
 
         if df_zona.empty:
             raise HTTPException(status_code=404, detail=f"No se encontraron viajes desde la zona '{zona}'.")
