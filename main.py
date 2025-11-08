@@ -2,7 +2,7 @@ import os
 # Importar las funciones desde los scripts
 from scripts.data_loader import cargar_datos
 from scripts.data_cleaning import (limpiar_nombres_columnas, convertir_tipos_fechas,eliminar_coordenadas_invalidas,filtar_rango_geografico_valido, eliminar_columnas_innecesarias,convertir_tipo_fecha,redondear_coordenadas)
-from scripts.data_new_features import (crear_columna_dia_semana_pickup, crear_columna_hora_pickup, crear_columna_fecha_pickup, crear_columna_viaje_duracion, crear_columna_hora_pico, crear_zona_viaje_pickup,crear_zona_viaje_dropoff)
+from scripts.data_new_features import (crear_columna_dia_semana_pickup, crear_columna_hora_pickup, crear_columna_fecha_pickup, crear_columna_viaje_duracion, crear_columna_hora_pico, crear_zona_viaje_pickup,crear_zona_viaje_dropoff,crear_columna_hora_dropof,crear_columna_fecha_dropoff)
 from scripts.data_imputation import (rellenar_valores_pasajeros_en_cero,eliminar_coordenadas_null)
 from scripts.data_saving import guardar_datos_limpios
 
@@ -41,15 +41,16 @@ if __name__ == "__main__":
         
         print("\n---INICIANDO AGREGACIÓN NUEVAS COLUMNAS---")
         df_final = crear_columna_hora_pickup(df_procesado)
+        df_final = crear_columna_hora_dropof(df_final)
         df_final = crear_columna_dia_semana_pickup(df_final)    
         df_final = crear_columna_fecha_pickup(df_final)
+        df_final = crear_columna_fecha_dropoff(df_final)
         df_final = crear_columna_viaje_duracion(df_final)
         df_final = crear_columna_hora_pico(df_final)
         df_final = crear_zona_viaje_pickup(df_final)
         df_final = crear_zona_viaje_dropoff(df_final)
-
         print("\n---AGREGACIÓN NUEVAS COLUMNAS TERMINADO---")
-        
+
         # GUARDAR DATOS
         guardar_datos_limpios(df_final, OUTPUT_CLEANED_PATH)
             
