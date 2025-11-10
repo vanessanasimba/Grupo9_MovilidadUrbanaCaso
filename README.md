@@ -1,50 +1,44 @@
-================================================================================
-🚖 NYC TAXI - ANÁLISIS GEOESPACIAL DE MOVILIDAD URBANA
-================================================================================
+# 🚖 NYC TAXI - ANÁLISIS GEOESPACIAL DE MOVILIDAD URBANA
 
-RESUMEN EJECUTIVO
---------------------------------------------------------------------------------
-Sistema de análisis geoespacial que procesa datos de taxis de Nueva York para 
-visualizar patrones de movilidad urbana mediante dashboards interactivos con 
-mapas de calor y flujos de viaje.
+---
 
-Tecnologías: Python | FastAPI | Streamlit | PyDeck | Pandas
-Grupo 9: Leonardo Mafla • Vanessa Nasimba • Edwin Tapia
+## 🧭 RESUMEN EJECUTIVO
+Sistema de análisis geoespacial que procesa datos de taxis de Nueva York para visualizar patrones de movilidad urbana mediante **dashboards interactivos** con **mapas de calor** y **flujos de viaje**.
 
-================================================================================
-TABLA DE CONTENIDOS
-================================================================================
-1. INSTALACIÓN Y CONFIGURACIÓN
-2. EJECUCIÓN DE LA APLICACIÓN
-3. USO DEL DASHBOARD
-4. ARQUITECTURA DEL SISTEMA
-5. API REST - ENDPOINTS
-6. SOLUCIÓN DE PROBLEMAS
+**Tecnologías:** Python | FastAPI | Streamlit | PyDeck | Pandas  
+**Grupo 9:** Leonardo Mafla • Vanessa Nasimba • Edwin Tapia
 
-================================================================================
-1. INSTALACIÓN Y CONFIGURACIÓN
-================================================================================
+---
 
-PASO 1: VERIFICAR REQUISITOS PREVIOS
---------------------------------------------------------------------------------
-Requisitos mínimos:
-✅ Python 3.8 - 3.11 (recomendado 3.10)
-✅ pip 21.0+
-✅ Git 2.0+
-✅ 4GB RAM mínimo
-✅ 5GB espacio en disco
+## 📚 TABLA DE CONTENIDOS
+1. [Instalación y Configuración](#1-instalación-y-configuración)  
+2. [Ejecución de la Aplicación](#2-ejecución-de-la-aplicación)  
+3. [Uso del Dashboard](#3-uso-del-dashboard)  
+4. [Arquitectura del Sistema](#4-arquitectura-del-sistema)  
+5. [API REST - Endpoints](#5-api-rest---endpoints)  
+6. [Solución de Problemas](#6-solución-de-problemas)
+
+---
+
+## 1. INSTALACIÓN Y CONFIGURACIÓN
+
+### 🔧 Paso 1: Verificar requisitos previos
+
+**Requisitos mínimos:**
+- ✅ Python 3.8 - 3.11 (recomendado 3.10)  
+- ✅ pip 21.0+  
+- ✅ Git 2.0+  
+- ✅ 4GB RAM mínimo  
+- ✅ 5GB de espacio libre en disco  
 
 Verificar instalaciones:
-    python --version
-    pip --version
-    git --version
+```bash
+python --version
+pip --version
+git --version
 
-Salida esperada:
-    Python 3.10.x
-    pip 23.x.x
-    git version 2.x.x
 
-PASO 2: CLONAR EL REPOSITORIO
+### 2. CLONAR EL REPOSITORIO
 --------------------------------------------------------------------------------
 Comandos:
     git clone https://github.com/tu-usuario/Grupo9_MovilidadUrbanaCaso.git
