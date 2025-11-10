@@ -249,6 +249,13 @@ p_min, p_max = st.sidebar.slider("Número de pasajeros:", pass_min, pass_max, (1
 st.sidebar.markdown("<hr>", unsafe_allow_html=True)
 st.sidebar.markdown('<p class="sidebar-subtitle">🗺️ Filtros para Mapa de flujos</p>', unsafe_allow_html=True)
 zona_sel = st.sidebar.selectbox("📍 Zona de Origen:", zonas_disponibles, index=0)
+# Validar que haya dos fechas seleccionadas
+if isinstance(rango_fechas, tuple) and len(rango_fechas) == 2:
+    inicio, fin = rango_fechas
+else:
+    st.warning("⚠️ Por favor selecciona **dos fechas** (inicio y fin) para continuar.")
+    st.stop()
+
 inicio, fin = rango_fechas
 
 params = {
