@@ -1,14 +1,13 @@
 # 🚖 NYC TAXI - ANÁLISIS GEOESPACIAL DE MOVILIDAD URBANA
 
----
-
 ## 🧭 RESUMEN EJECUTIVO
 Sistema de análisis geoespacial que procesa datos de taxis de Nueva York para visualizar patrones de movilidad urbana mediante **dashboards interactivos** con **mapas de calor** y **flujos de viaje**.
 
 **Tecnologías:** Python | FastAPI | Streamlit | PyDeck | Pandas  
-**Grupo 9:** Leonardo Mafla • Vanessa Nasimba • Edwin Tapia
-
----
+**Grupo 9:** 
+- Leonardo Mafla 
+- Vanessa Nasimba 
+- Edwin Tapia
 
 ## 📚 TABLA DE CONTENIDOS
 1. [Instalación y Configuración](#1-instalación-y-configuración)  
